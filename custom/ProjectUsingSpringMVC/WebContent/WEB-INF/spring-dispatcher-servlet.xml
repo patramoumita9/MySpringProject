@@ -1,14 +1,25 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+                    http://www.springframework.org/schema/tx 
+                    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd     
+                    http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                    http://www.springframework.org/schema/context 
+                    http://www.springframework.org/schema/context/spring-context-3.1.xsd">
   
- 
- <bean	id="HandlerMapping"  class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
- 
+ <!-- Below two declarations are required for non annotation based controller -->
+ <!-- <bean	id="HandlerMapping"  class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/> -->
 	
- <bean name="/welcome.html" class="com.own.proj.controller.HelloController" />
+ <!-- <bean name="/welcome.html" class="com.own.proj.controller.HelloController" /> -->
  
+ <context:component-scan base-package="com.own.proj.controller"/> <!-- All the annotation based controller lies in this package -->
+<!-- it tells Spring to scan those packages for Annotations. If we don't use this declaration, we need to declare every controller class even if we use annotation based controller-->
+<mvc:annotation-driven/><!-- It gives you greater control over the inner workings of Spring MVC and it enables MVC Java config-->
  
  <bean id="viewResolver"
     	class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
@@ -20,5 +31,38 @@
         </property>
  </bean>
  
+ <bean name="emp" class="com.own.proj.modelClass.Employee">
+	</bean>
+	
+	<bean id="messageSource"
+      class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+      <property name="basename" value="/WEB-INF/studentMessages" />
+      <!-- <property name="cacheSeconds" value="1" /> --><!-- At runtime this line requests spring mvc to load all the changes made in properties file after every 1 second -->
+      </bean>
+    
+    <mvc:interceptors>
+    <mvc:interceptor>
+    <mvc:mapping path="/greet/empAdmissionForm" />
+    <bean class="com.own.proj.intercepors.DayOfWeekBasedAccessInterceptor" />
+    </mvc:interceptor>
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    <property name="paramName" value="siteLanguage" /><!-- It extracts the parameter siteLanguage and informs the application to pick the proper properties file -->
+    </bean>
+    </mvc:interceptors>
+    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" /><!-- This entry is mandatory while we use LocaleChangeInterceptor. -->
+    <!-- Otherwise it won't work. Spring mvc first checks if there is any cookie present-->
+    
+    <!-- Exception handling can be done with the below changes in configuration file. In that case we don't need any separate class with @ControllerAdvice annotation -->
+   <!--  <bean id="simpleMappingExceptionResolver"
+    	class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    	<property name="exceptionMappings">
+    	<map>
+    	<entry key="NullPointerException" value="NullPointerException" />
+    	</map>
+    	</property>
+    	
+    	<property name="defaultErrorView" value="Exception" />
+    </bean> -->
 
 </beans>
