@@ -65,16 +65,5 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
     	
     	<property name="defaultErrorView" value="Exception" />
     </bean> -->
-    
-   <!--  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-    <property name="messageConverters">
-        <list>
-            <ref bean="jsonMessageConverter"/>
-        </list>
-    </property>
-</bean>
-
-<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-</bean> -->
 
 </beans>
