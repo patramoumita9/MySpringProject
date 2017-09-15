@@ -19,7 +19,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
  
  <context:component-scan base-package="com.own.proj.controller"/> <!-- All the annotation based controller lies in this package -->
 <!-- it tells Spring to scan those packages for Annotations. If we don't use this declaration, we need to declare every controller class even if we use annotation based controller-->
-<mvc:annotation-driven/><!-- It gives you greater control over the inner workings of Spring MVC and it enables MVC Java config-->
+<mvc:annotation-driven/><!-- It gives you greater control over the inner workings of Spring MVC and it enables MVC Java config and this is similar to @EnableWebMvc in java class-->
  
  <bean id="viewResolver"
     	class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
@@ -34,6 +34,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
  <bean name="emp" class="com.own.proj.modelClass.Employee">
 	</bean>
 	
+	<!-- It resolves messages from resource bundles for different locales. -->
 	<bean id="messageSource"
       class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
       <property name="basename" value="/WEB-INF/studentMessages" />
@@ -64,5 +65,16 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
     	
     	<property name="defaultErrorView" value="Exception" />
     </bean> -->
+    
+   <!--  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <property name="messageConverters">
+        <list>
+            <ref bean="jsonMessageConverter"/>
+        </list>
+    </property>
+</bean>
+
+<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+</bean> -->
 
 </beans>
